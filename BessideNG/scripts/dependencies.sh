@@ -1,5 +1,5 @@
 #!/bin/sh
-#2019 - mattlawer
+#2019 - mattlawer & adde88
 
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/sd/lib:/sd/usr/lib
 export PATH=$PATH:/sd/usr/bin:/sd/usr/sbin
@@ -9,16 +9,22 @@ export PATH=$PATH:/sd/usr/bin:/sd/usr/sbin
 }
 
 touch /tmp/BessideNG.progress
+mkdir -p /tmp/BessideNG
+wget https://github.com/adde88/aircrack-ng-openwrt/tree/master/bin/ar71xx/packages/base -P /tmp/BessideNG
+AIRMON=`grep -F "airmon-ng_" /tmp/BessideNG/base | awk {'print $5'} | awk -F'"' {'print $2'}`
+AIRCRACK=`grep -F "aircrack-ng_" /tmp/BessideNG/base | awk {'print $5'} | awk -F'"' {'print $2'}
 
 if [ "$1" = "install" ]; then
   if [ "$2" = "internal" ]; then
-  	# need to be more secure...
-    curl https://raw.githubusercontent.com/adde88/besside-ng_pineapple/master/besside-ng -o /usr/bin/besside-ng
-    chmod +x /usr/bin/besside-ng
+	wget https://github.com/adde88/aircrack-ng-openwrt/raw/master/bin/ar71xx/packages/base/"$AIRMON" -P /tmp/BessideNG
+	wget https://github.com/adde88/aircrack-ng-openwrt/raw/master/bin/ar71xx/packages/base/"$AIRCRACK" -P /tmp/BessideNG
+	opkg update
+	opkg install /tmp/BessideNG/*.ipk --force-overwrite
   elif [ "$2" = "sd" ]; then
-  	# need to be more secure...
-    curl https://raw.githubusercontent.com/adde88/besside-ng_pineapple/master/besside-ng -o /sd/usr/bin/besside-ng
-    chmod +x /sd/usr/bin/besside-ng
+	wget https://github.com/adde88/aircrack-ng-openwrt/raw/master/bin/ar71xx/packages/base/"$AIRMON" -P /tmp/BessideNG
+	wget https://github.com/adde88/aircrack-ng-openwrt/raw/master/bin/ar71xx/packages/base/"$AIRCRACK" -P /tmp/BessideNG
+	opkg update
+	opkg install /tmp/BessideNG/*.ipk --force-overwrite --dest sd
   fi
 
   touch /etc/config/BessideNG
@@ -30,9 +36,8 @@ if [ "$1" = "install" ]; then
   uci commit BessideNG.module.installed
 
 elif [ "$1" = "remove" ]; then
-  rm -rf /usr/bin/besside-ng
-  rm -rf /sd/usr/bin/besside-ng
   rm -rf /etc/config/BessideNG
 fi
 
 rm /tmp/BessideNG.progress
+rm -rf /tmp/BessideNG

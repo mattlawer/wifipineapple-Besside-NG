@@ -12,7 +12,7 @@ touch /tmp/BessideNG.progress
 mkdir -p /tmp/BessideNG
 wget https://github.com/adde88/aircrack-ng-openwrt/tree/master/bin/ar71xx/packages/base -P /tmp/BessideNG
 AIRMON=`grep -F "airmon-ng_" /tmp/BessideNG/base | awk {'print $5'} | awk -F'"' {'print $2'}`
-AIRCRACK=`grep -F "aircrack-ng_" /tmp/BessideNG/base | awk {'print $5'} | awk -F'"' {'print $2'}
+AIRCRACK=`grep -F "aircrack-ng_" /tmp/BessideNG/base | awk {'print $5'} | awk -F'"' {'print $2'}`
 
 if [ "$1" = "install" ]; then
   if [ "$2" = "internal" ]; then

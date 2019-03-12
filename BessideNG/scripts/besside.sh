@@ -1,5 +1,5 @@
 #!/bin/sh
-#2019 - mattlawer
+#2019 - mattlawer & adde88
 
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/sd/lib:/sd/usr/lib
 export PATH=$PATH:/sd/usr/bin:/sd/usr/sbin

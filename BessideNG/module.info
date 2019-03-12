@@ -1,0 +1,10 @@
+{
+    "author": "mattlawer",
+    "description": "Automated WiFi Hacking using besside-ng from the aircrack-ng suite",
+    "devices": [
+        "nano",
+        "tetra"
+    ],
+    "title": "Besside-NG",
+    "version": "1.0"
+}

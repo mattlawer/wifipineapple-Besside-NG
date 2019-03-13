@@ -33,4 +33,4 @@ elif [ "$1" = "remove" ]; then
   rm -rf /etc/config/BessideNG
 fi
 
-rm -rf /tmp/BessideNG
+rm /tmp/BessideNG.progress

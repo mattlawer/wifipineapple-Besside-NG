@@ -16,15 +16,11 @@ AIRCRACK=`grep -F "aircrack-ng_" /tmp/BessideNG/base | awk {'print $5'} | awk -F
 
 if [ "$1" = "install" ]; then
   if [ "$2" = "internal" ]; then
-	wget https://github.com/adde88/aircrack-ng-openwrt/raw/master/bin/ar71xx/packages/base/"$AIRMON" -P /tmp/BessideNG
-	wget https://github.com/adde88/aircrack-ng-openwrt/raw/master/bin/ar71xx/packages/base/"$AIRCRACK" -P /tmp/BessideNG
-	opkg update
-	opkg install /tmp/BessideNG/*.ipk --force-overwrite
+    curl https://raw.githubusercontent.com/adde88/besside-ng_pineapple/master/besside-ng -o /usr/bin/besside-ng
+	  chmod +x /usr/bin/besside-ng
   elif [ "$2" = "sd" ]; then
-	wget https://github.com/adde88/aircrack-ng-openwrt/raw/master/bin/ar71xx/packages/base/"$AIRMON" -P /tmp/BessideNG
-	wget https://github.com/adde88/aircrack-ng-openwrt/raw/master/bin/ar71xx/packages/base/"$AIRCRACK" -P /tmp/BessideNG
-	opkg update
-	opkg install /tmp/BessideNG/*.ipk --force-overwrite --dest sd
+	  curl https://raw.githubusercontent.com/adde88/besside-ng_pineapple/master/besside-ng -o /sd/usr/bin/besside-ng
+	  chmod +x /sd/usr/bin/besside-ng
   fi
 
   touch /etc/config/BessideNG
@@ -36,8 +32,9 @@ if [ "$1" = "install" ]; then
   uci commit BessideNG.module.installed
 
 elif [ "$1" = "remove" ]; then
+  rm -rf /usr/bin/besside-ng
+	rm -rf /sd/usr/bin/besside-ng
   rm -rf /etc/config/BessideNG
 fi
 
-rm /tmp/BessideNG.progress
 rm -rf /tmp/BessideNG

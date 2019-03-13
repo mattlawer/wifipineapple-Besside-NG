@@ -26,17 +26,20 @@
 					<tr class="form-inline" ng-show="$root.status.installed">
 						<td style="padding-bottom: .5em;" class="text-muted">Monitor interface</td>
 						<td style="text-align:right;padding-bottom: .5em;">
-              <select class="form-control input-sm" ng-disabled="starting || status == 'Stop'" ng-model="selectedInterface">
-                  <option ng-repeat="interface in interfaces">{{interface}}</option>
+              <select class="form-control input-sm" ng-disabled="starting || status == 'Stop'" ng-model="selectedMonitor">
+                  <option ng-repeat="monitor in monitors">{{monitor}}</option>
               </select>
             </td>
-		</tr>
-		<tr ng-show="$root.status.installed">
-			<td style="padding-bottom: .5em;" class="text-muted"></td>
-			<td style="text-align:right;padding-bottom: .5em;">
-				<button type="button" style="width: 90px;" class="btn btn-{{statusLabel}} btn-xs" ng-disabled="starting || interfaces.length == 0" ng-click="toggleBessideNG()">{{status}}</button>
-			</td>
-		</tr>
+					</tr>
+					<tr ng-show="$root.status.installed">
+						<td style="padding-bottom: .5em;" class="text-muted"></td>
+						<td style="text-align:right;padding-bottom: .5em;">
+							<button type="button" style="width: 90px;" class="btn btn-{{statusLabel}} btn-xs" ng-disabled="starting || monitors.length == 0" ng-click="toggleBessideNG()">{{status}}</button>
+						</td>
+					</tr>
+					<tr ng-show="$root.status.installed && monitors.length == 0">
+						<td style="padding-bottom: .5em;" class="text-muted">Start monitor mode on an interface below.</td>
+					</tr>
 					<tr ng-show="$root.status.installed">
 						<td style="padding-bottom: .5em;" class="text-muted">Start on boot</td>
 						<td style="text-align:right;padding-bottom: .5em;">
@@ -89,6 +92,41 @@
 
       </div>
     </div>
+</div>
+
+<div ng-controller="BessideNG_InterfacesController">
+	<div class="panel panel-default" ng-show="$root.status.installed">
+			<div class="panel-heading pointer" data-toggle="collapse" data-target="#Interfaces">
+					<h4 class="panel-title">Interfaces</span></h4>
+			</div>
+			<div id="Interfaces" class="panel-collapse collapse">
+					<div class="panel-body">
+			<form>
+				<div class="form-group">
+					<div class="input-group">
+						<span class="input-group-addon input-sm">Interface</span>
+						<select class="form-control input-sm" ng-disabled="scanning" ng-model="selectedInterface">
+								<option ng-repeat="interface in interfaces">{{ interface }}</option>
+						</select>
+							<span class="input-group-btn">
+									<button class="btn btn-{{startMonLabel}} btn-sm" ng-disabled="scanning || startingMon" ng-click="startMonitor()">{{startMon}}</button>
+							</span>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="input-group">
+						<span class="input-group-addon input-sm">Monitor</span>
+						<select class="form-control input-sm" ng-disabled="scanning || monitors.length == 0" ng-model="selectedMonitor">
+								<option ng-repeat="monitor in monitors">{{ monitor }}</option>
+						</select>
+						<span class="input-group-btn">
+								<button class="btn btn-{{stopMonLabel}} btn-sm" ng-disabled="scanning || stoppingMon || monitors.length == 0" ng-click="stopMonitor()">{{stopMon}}</button>
+						</span>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
 </div>
 
 <div class="panel panel-default" ng-show="$root.status.installed" ng-controller="BessideNG_OwnedController">

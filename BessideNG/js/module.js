@@ -28,8 +28,8 @@ registerController('BessideNG_ControlsController', ['$api', '$scope', '$rootScop
 	$scope.bootLabelON = "default";
 	$scope.bootLabelOFF = "default";
 
-	$scope.interfaces = [];
-	$scope.selectedInterface = "";
+	$scope.monitors = [];
+	$scope.selectedMonitor = '';
 
 	$scope.saveSettingsLabel = "default";
 
@@ -152,21 +152,117 @@ registerController('BessideNG_ControlsController', ['$api', '$scope', '$rootScop
 		})
 	});
 
+	$scope.getMonitors = (function() {
+		$api.request({
+			module: 'BessideNG',
+			action: 'getMonitors'
+		}, function(response) {
+			$scope.monitors = response.monitors;
+			if (response.selected != "")
+				$scope.selectedMonitor = response.selected;
+			else
+				$scope.selectedMonitor = $scope.monitors[0];
+		});
+	});
+
+	$scope.refreshStatus();
+	$scope.getMonitors();
+
+	$rootScope.$watch('status.refreshMonitors', function(param) {
+		if (param) {
+			$scope.getMonitors();
+		}
+	});
+}]);
+
+registerController('BessideNG_InterfacesController', ['$api', '$scope', '$rootScope', '$timeout', '$interval', '$filter', function($api, $scope, $rootScope, $timeout, $interval, $filter) {
+	$scope.interfaces = [];
+	$scope.selectedInterface = '';
+
+	$scope.startMonLabel = "default";
+	$scope.startMon = "Start Monitor";
+	$scope.startingMon = false;
+
+	$scope.monitors = [];
+	$scope.selectedMonitor = '';
+
+	$scope.stopMonLabel = "default";
+	$scope.stopMon = "Stop Monitor";
+	$scope.stoppingMon = false;
+
+	$scope.startMonitor = (function() {
+		$scope.startMonLabel = "warning";
+		$scope.startMon = "Starting...";
+		$scope.startingMon = true;
+
+		$api.request({
+			module: 'BessideNG',
+			action: 'startMonitor',
+			interface: $scope.selectedInterface
+		}, function(response) {
+			$scope.startMonLabel = "success";
+			$scope.startMon = "Done";
+
+			$timeout(function() {
+				$scope.getInterfaces();
+				$scope.getMonitors();
+
+				$scope.startMonLabel = "default";
+				$scope.startMon = "Start Monitor";
+				$scope.startingMon = false;
+			}, 2000);
+		});
+	});
+
+	$scope.stopMonitor = (function() {
+		$scope.stopMonLabel = "warning";
+		$scope.stopMon = "Stopping...";
+		$scope.stoppingMon = true;
+
+		$api.request({
+			module: 'BessideNG',
+			action: 'stopMonitor',
+			monitor: $scope.selectedMonitor
+		}, function(response) {
+			$scope.stopMonLabel = "success";
+			$scope.stopMon = "Done";
+
+			$timeout(function() {
+				$scope.getInterfaces();
+				$scope.getMonitors();
+
+				$scope.stopMonLabel = "default";
+				$scope.stopMon = "Stop Monitor";
+				$scope.stoppingMon = false;
+			}, 2000);
+		});
+	});
+
 	$scope.getInterfaces = (function() {
 		$api.request({
 			module: 'BessideNG',
 			action: 'getInterfaces'
 		}, function(response) {
 			$scope.interfaces = response.interfaces;
-			if (response.selected != "")
-				$scope.selectedInterface = response.selected;
-			else
-				$scope.selectedInterface = $scope.interfaces[0];
+			$scope.selectedInterface = $scope.interfaces[0];
 		});
 	});
 
-	$scope.refreshStatus();
+	$scope.getMonitors = (function() {
+		$rootScope.status.refreshMonitors = false;
+		$api.request({
+			module: 'BessideNG',
+			action: 'getMonitors'
+		}, function(response) {
+			$scope.monitors = response.monitors;
+			$scope.selectedMonitor = $scope.monitors[0];
+
+			$rootScope.status.refreshMonitors = true;
+		});
+	});
+
 	$scope.getInterfaces();
+	$scope.getMonitors();
 }]);
 
 registerController('BessideNG_OwnedController', ['$api', '$scope', '$rootScope', '$interval', function($api, $scope, $rootScope, $interval) {

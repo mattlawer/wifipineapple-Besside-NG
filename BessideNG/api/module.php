@@ -23,6 +23,9 @@ class BessideNG extends Module
             case 'getInterfaces':
                 $this->getInterfaces();
                 break;
+            case 'getMonitors':
+                $this->getMonitors();
+                break;
             case 'startMonitor':
                 $this->startMonitor();
                 break;
@@ -150,9 +153,14 @@ class BessideNG extends Module
     }
     
     private function getInterfaces() {
+        exec("iwconfig 2> /dev/null | grep \"wlan*\" | grep -v \"mon*\" | awk '{print $1}'", $interfaceArray);
+        $this->response = array("interfaces" => $interfaceArray);
+    }
+
+    private function getMonitors() {
         exec("iwconfig 2> /dev/null | grep \"mon*\" | awk '{print $1}'", $interfaceArray);
         $this->response = array(
-        	"interfaces" => $interfaceArray,
+        	"monitors" => $interfaceArray,
         	"selected" => reset(preg_grep('/^'.$this->uciGet("BessideNG.run.interface").'/', $interfaceArray))
         );
     }

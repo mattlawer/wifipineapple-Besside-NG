@@ -12,10 +12,10 @@ touch /tmp/BessideNG.progress
 
 if [ "$1" = "install" ]; then
   if [ "$2" = "internal" ]; then
-    curl https://raw.githubusercontent.com/adde88/besside-ng_pineapple/master/besside-ng -o /usr/bin/besside-ng
+    curl -L "https://github.com/adde88/besside-ng_pineapple/blob/25689637a80e4cd147580d5c7d0eadc6ed388946/besside-ng?raw=true" -o /usr/bin/besside-ng
 	  chmod +x /usr/bin/besside-ng
   elif [ "$2" = "sd" ]; then
-	  curl https://raw.githubusercontent.com/adde88/besside-ng_pineapple/master/besside-ng -o /sd/usr/bin/besside-ng
+	  curl -L "https://github.com/adde88/besside-ng_pineapple/blob/25689637a80e4cd147580d5c7d0eadc6ed388946/besside-ng?raw=true" -o /sd/usr/bin/besside-ng
 	  chmod +x /sd/usr/bin/besside-ng
   fi
 

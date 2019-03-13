@@ -1,12 +1,12 @@
-registerController('BessideNG_Controller', ['$api', '$scope', '$rootScope', '$interval', '$timeout', function($api, $scope, $rootScope, $interval, $timeout) {
+registerController('BessideNG_Controller', ['$api', '$scope', '$rootScope', '$interval', '$timeout', function ($api, $scope, $rootScope, $interval, $timeout) {
 	$scope.title = "Loading...";
 	$scope.version = "Loading...";
 
-	$scope.refreshInfo = (function() {
+	$scope.refreshInfo = (function () {
 		$api.request({
 			module: 'BessideNG',
 			action: "refreshInfo"
-		}, function(response) {
+		}, function (response) {
 			$scope.title = response.title;
 			$scope.version = "v" + response.version;
 		})
@@ -16,7 +16,7 @@ registerController('BessideNG_Controller', ['$api', '$scope', '$rootScope', '$in
 
 }]);
 
-registerController('BessideNG_ControlsController', ['$api', '$scope', '$rootScope', '$interval', '$timeout', function($api, $scope, $rootScope, $interval, $timeout) {
+registerController('BessideNG_ControlsController', ['$api', '$scope', '$rootScope', '$interval', '$timeout', function ($api, $scope, $rootScope, $interval, $timeout) {
 	$scope.status = "Loading...";
 	$scope.statusLabel = "default";
 	$scope.starting = false;
@@ -42,11 +42,11 @@ registerController('BessideNG_ControlsController', ['$api', '$scope', '$rootScop
 		refreshCaptures: false
 	};
 
-	$scope.refreshStatus = (function() {
+	$scope.refreshStatus = (function () {
 		$api.request({
 			module: "BessideNG",
 			action: "refreshStatus"
-		}, function(response) {
+		}, function (response) {
 			$scope.status = response.status;
 			$scope.statusLabel = response.statusLabel;
 
@@ -61,8 +61,8 @@ registerController('BessideNG_ControlsController', ['$api', '$scope', '$rootScop
 			$scope.bootLabelOFF = response.bootLabelOFF;
 		})
 	});
-	
-	$scope.handleDependencies = (function(param) {
+
+	$scope.handleDependencies = (function (param) {
 		if (!$rootScope.status.installed)
 			$scope.install = "Installing...";
 		else
@@ -72,16 +72,16 @@ registerController('BessideNG_ControlsController', ['$api', '$scope', '$rootScop
 			module: 'BessideNG',
 			action: 'handleDependencies',
 			destination: param
-		}, function(response) {
+		}, function (response) {
 			if (response.success === true) {
 				$scope.installLabel = "warning";
 				$scope.processing = true;
 
-				$scope.handleDependenciesInterval = $interval(function() {
+				$scope.handleDependenciesInterval = $interval(function () {
 					$api.request({
 						module: 'BessideNG',
 						action: 'handleDependenciesStatus'
-					}, function(response) {
+					}, function (response) {
 						if (response.success === true) {
 							$scope.processing = false;
 							$interval.cancel($scope.handleDependenciesInterval);
@@ -93,7 +93,7 @@ registerController('BessideNG_ControlsController', ['$api', '$scope', '$rootScop
 		});
 	});
 
-	$scope.toggleBessideNG = (function() {
+	$scope.toggleBessideNG = (function () {
 		if ($scope.status != "Stop")
 			$scope.status = "Starting...";
 		else
@@ -109,8 +109,8 @@ registerController('BessideNG_ControlsController', ['$api', '$scope', '$rootScop
 			module: 'BessideNG',
 			action: 'toggleBessideNG',
 			interface: $scope.selectedInterface
-		}, function(response) {
-			$timeout(function() {
+		}, function (response) {
+			$timeout(function () {
 				$rootScope.status.refreshOutput = true;
 				$rootScope.status.refreshCaptures = true;
 
@@ -120,7 +120,7 @@ registerController('BessideNG_ControlsController', ['$api', '$scope', '$rootScop
 		})
 	});
 
-	$scope.toggleBessideNGOnBoot = (function() {
+	$scope.toggleBessideNGOnBoot = (function () {
 		if ($scope.bootLabelON == "default") {
 			$scope.bootLabelON = "success";
 			$scope.bootLabelOFF = "default";
@@ -132,31 +132,31 @@ registerController('BessideNG_ControlsController', ['$api', '$scope', '$rootScop
 		$api.request({
 			module: 'BessideNG',
 			action: 'toggleBessideNGOnBoot',
-		}, function(response) {
+		}, function (response) {
 			$scope.refreshStatus();
 		})
 	});
-	
-	$scope.saveAutostartSettings = (function() {
+
+	$scope.saveAutostartSettings = (function () {
 		$api.request({
 			module: 'BessideNG',
 			action: 'saveAutostartSettings',
 			settings: {
 				interface: $scope.selectedInterface
 			}
-		}, function(response) {
+		}, function (response) {
 			$scope.saveSettingsLabel = "success";
-			$timeout(function() {
+			$timeout(function () {
 				$scope.saveSettingsLabel = "default";
 			}, 2000);
 		})
 	});
 
-	$scope.getMonitors = (function() {
+	$scope.getMonitors = (function () {
 		$api.request({
 			module: 'BessideNG',
 			action: 'getMonitors'
-		}, function(response) {
+		}, function (response) {
 			$scope.monitors = response.monitors;
 			if (response.selected != "")
 				$scope.selectedMonitor = response.selected;
@@ -168,14 +168,14 @@ registerController('BessideNG_ControlsController', ['$api', '$scope', '$rootScop
 	$scope.refreshStatus();
 	$scope.getMonitors();
 
-	$rootScope.$watch('status.refreshMonitors', function(param) {
+	$rootScope.$watch('status.refreshMonitors', function (param) {
 		if (param) {
 			$scope.getMonitors();
 		}
 	});
 }]);
 
-registerController('BessideNG_InterfacesController', ['$api', '$scope', '$rootScope', '$timeout', '$interval', '$filter', function($api, $scope, $rootScope, $timeout, $interval, $filter) {
+registerController('BessideNG_InterfacesController', ['$api', '$scope', '$rootScope', '$timeout', '$interval', '$filter', function ($api, $scope, $rootScope, $timeout, $interval, $filter) {
 	$scope.interfaces = [];
 	$scope.selectedInterface = '';
 
@@ -190,7 +190,7 @@ registerController('BessideNG_InterfacesController', ['$api', '$scope', '$rootSc
 	$scope.stopMon = "Stop Monitor";
 	$scope.stoppingMon = false;
 
-	$scope.startMonitor = (function() {
+	$scope.startMonitor = (function () {
 		$scope.startMonLabel = "warning";
 		$scope.startMon = "Starting...";
 		$scope.startingMon = true;
@@ -199,11 +199,11 @@ registerController('BessideNG_InterfacesController', ['$api', '$scope', '$rootSc
 			module: 'BessideNG',
 			action: 'startMonitor',
 			interface: $scope.selectedInterface
-		}, function(response) {
+		}, function (response) {
 			$scope.startMonLabel = "success";
 			$scope.startMon = "Done";
 
-			$timeout(function() {
+			$timeout(function () {
 				$scope.getInterfaces();
 				$scope.getMonitors();
 
@@ -214,7 +214,7 @@ registerController('BessideNG_InterfacesController', ['$api', '$scope', '$rootSc
 		});
 	});
 
-	$scope.stopMonitor = (function() {
+	$scope.stopMonitor = (function () {
 		$scope.stopMonLabel = "warning";
 		$scope.stopMon = "Stopping...";
 		$scope.stoppingMon = true;
@@ -223,11 +223,11 @@ registerController('BessideNG_InterfacesController', ['$api', '$scope', '$rootSc
 			module: 'BessideNG',
 			action: 'stopMonitor',
 			monitor: $scope.selectedMonitor
-		}, function(response) {
+		}, function (response) {
 			$scope.stopMonLabel = "success";
 			$scope.stopMon = "Done";
 
-			$timeout(function() {
+			$timeout(function () {
 				$scope.getInterfaces();
 				$scope.getMonitors();
 
@@ -238,22 +238,22 @@ registerController('BessideNG_InterfacesController', ['$api', '$scope', '$rootSc
 		});
 	});
 
-	$scope.getInterfaces = (function() {
+	$scope.getInterfaces = (function () {
 		$api.request({
 			module: 'BessideNG',
 			action: 'getInterfaces'
-		}, function(response) {
+		}, function (response) {
 			$scope.interfaces = response.interfaces;
 			$scope.selectedInterface = $scope.interfaces[0];
 		});
 	});
 
-	$scope.getMonitors = (function() {
+	$scope.getMonitors = (function () {
 		$rootScope.status.refreshMonitors = false;
 		$api.request({
 			module: 'BessideNG',
 			action: 'getMonitors'
-		}, function(response) {
+		}, function (response) {
 			$scope.monitors = response.monitors;
 			$scope.selectedMonitor = $scope.monitors[0];
 
@@ -265,24 +265,24 @@ registerController('BessideNG_InterfacesController', ['$api', '$scope', '$rootSc
 	$scope.getMonitors();
 }]);
 
-registerController('BessideNG_OwnedController', ['$api', '$scope', '$rootScope', '$interval', function($api, $scope, $rootScope, $interval) {
+registerController('BessideNG_OwnedController', ['$api', '$scope', '$rootScope', '$interval', function ($api, $scope, $rootScope, $interval) {
 	$scope.running = false;
 	$scope.owned = [];
 
 	$scope.refreshLabelON = "default";
 	$scope.refreshLabelOFF = "danger";
 
-	$scope.refreshOutput = (function() {
+	$scope.refreshOutput = (function () {
 		$api.request({
 			module: "BessideNG",
 			action: "refreshOutput",
-		}, function(response) {
+		}, function (response) {
 			$scope.running = response.running;
 			$scope.owned = response.owned;
 		})
 	});
 
-	$scope.toggleAutoRefresh = (function() {
+	$scope.toggleAutoRefresh = (function () {
 		if ($scope.autoRefreshInterval) {
 			$interval.cancel($scope.autoRefreshInterval);
 			$scope.autoRefreshInterval = null;
@@ -292,7 +292,7 @@ registerController('BessideNG_OwnedController', ['$api', '$scope', '$rootScope',
 			$scope.refreshLabelON = "success";
 			$scope.refreshLabelOFF = "default";
 
-			$scope.autoRefreshInterval = $interval(function() {
+			$scope.autoRefreshInterval = $interval(function () {
 				$scope.refreshOutput();
 			}, 5000);
 		}
@@ -301,7 +301,7 @@ registerController('BessideNG_OwnedController', ['$api', '$scope', '$rootScope',
 	$scope.refreshOutput();
 	$scope.toggleAutoRefresh();
 
-	$rootScope.$watch('status.refreshOutput', function(param) {
+	$rootScope.$watch('status.refreshOutput', function (param) {
 		if (param) {
 			$scope.refreshOutput();
 		}
@@ -309,47 +309,47 @@ registerController('BessideNG_OwnedController', ['$api', '$scope', '$rootScope',
 
 }]);
 
-registerController('BessideNG_HistoryController', ['$api', '$scope', '$rootScope', function($api, $scope, $rootScope) {
+registerController('BessideNG_HistoryController', ['$api', '$scope', '$rootScope', function ($api, $scope, $rootScope) {
 	$scope.captures = [];
 	$scope.historyOutput = 'Loading...';
 	$scope.historyDate = 'Loading...';
 
-	$scope.refreshCaptures = (function() {
+	$scope.refreshCaptures = (function () {
 		$api.request({
 			module: "BessideNG",
 			action: "refreshCaptures"
-		}, function(response) {
+		}, function (response) {
 			$scope.captures = response;
 		})
 	});
-	
-	$scope.viewCapture = (function(param) {
+
+	$scope.viewCapture = (function (param) {
 		$api.request({
 			module: "BessideNG",
 			action: "viewCapture",
 			file: param
-		}, function(response) {
+		}, function (response) {
 			$scope.historyOutput = response.output;
 			$scope.historyDate = response.date;
 		})
 	});
 
-	$scope.deleteCapture = (function(param) {
+	$scope.deleteCapture = (function (param) {
 		$api.request({
 			module: "BessideNG",
 			action: "deleteCapture",
 			file: param
-		}, function(response) {
+		}, function (response) {
 			$scope.refreshCaptures();
 		})
 	});
 
-	$scope.downloadCapture = (function(param) {
+	$scope.downloadCapture = (function (param) {
 		$api.request({
 			module: 'BessideNG',
 			action: 'downloadCapture',
 			file: param
-		}, function(response) {
+		}, function (response) {
 			if (response.error === undefined) {
 				window.location = '/api/?download=' + response.download;
 			}
@@ -358,7 +358,7 @@ registerController('BessideNG_HistoryController', ['$api', '$scope', '$rootScope
 
 	$scope.refreshCaptures();
 
-	$rootScope.$watch('status.refreshCaptures', function(param) {
+	$rootScope.$watch('status.refreshCaptures', function (param) {
 		if (param) {
 			$scope.refreshCaptures();
 		}

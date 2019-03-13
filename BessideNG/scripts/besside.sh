@@ -34,12 +34,19 @@ if [ "$1" = "start" ]; then
   uci commit BessideNG.run.log
   
   echo -e "$(date +'%d/%m/%y %H:%M:%S') starting manually" >> ${LOG}
-  echo -e "Interface : ${MYINTERFACE}" >> ${LOG}
+  echo -e "interface : ${MYINTERFACE}" >> ${LOG}
   
-  cd ${RUNFOLDER} 
+  cd ${RUNFOLDER}
   besside-ng ${MYINTERFACE} &> /dev/null &
   cd -
   echo -e "running from ${RUNFOLDER}" >> ${LOG}
 elif [ "$1" = "stop" ]; then
+  MYTIME=`uci get BessideNG.run.log`
+	RUNFOLDER=/pineapple/modules/BessideNG/log/${MYTIME}
+	LOG=${RUNFOLDER}/infos.log
+
+	if [ -f ${LOG} ]; then
+		echo -e " - stopping -" >> ${LOG}
+	fi
   killall -9 besside-ng
 fi

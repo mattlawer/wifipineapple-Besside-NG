@@ -15,6 +15,7 @@ if [ "$1" = "install" ]; then
     wget "https://github.com/adde88/besside-ng_pineapple/blob/25689637a80e4cd147580d5c7d0eadc6ed388946/besside-ng?raw=true" -O /usr/bin/besside-ng
 	  chmod +x /usr/bin/besside-ng
   elif [ "$2" = "sd" ]; then
+    mkdir -p /sd/usr/bin/
 	  wget "https://github.com/adde88/besside-ng_pineapple/blob/25689637a80e4cd147580d5c7d0eadc6ed388946/besside-ng?raw=true" -O /sd/usr/bin/besside-ng
 	  chmod +x /sd/usr/bin/besside-ng
   fi

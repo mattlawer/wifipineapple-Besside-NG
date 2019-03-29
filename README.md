@@ -11,7 +11,7 @@ besside-ng module for the WiFi Pineapple using besside-ng binaries from [github.
 
         scp -r BessideNG root@172.16.42.1:/pineapple/modules/
     
-1) SSH into the WiFi Pineapple to change the owner and permissions
+3) SSH into the WiFi Pineapple to change the owner and permissions
 
 ![SSH](https://raw.githubusercontent.com/mattlawer/wifipineapple-Besside-NG/master/screenshots/ssh.png)
 
@@ -21,7 +21,7 @@ besside-ng module for the WiFi Pineapple using besside-ng binaries from [github.
         # Add execute permission to the scripts
         chmod +x /pineapple/modules/BessideNG/scripts/*
 
-1) Refresh the WiFi Pineapple web interface, go to Modules->Besside-NG and click install.
+4) Refresh the WiFi Pineapple web interface, go to Modules->Besside-NG and click install.
 
 `You need a wireless interface in monitor mode to launch besside-ng, or just enable 'Start on boot' and reboot, the script will set a wlan interface in monitor mode for you at boot`
 

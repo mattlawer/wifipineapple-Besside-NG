@@ -7,17 +7,17 @@ export PATH=$PATH:/sd/usr/bin:/sd/usr/sbin
 [[ -f /tmp/BessideNG.progress ]] && {
   exit 0
 }
-https://github.com/adde88/besside-ng_pineapple/raw/master/besside-ng
+
 touch /tmp/BessideNG.progress
 
 if [ "$1" = "install" ]; then
   if [ "$2" = "internal" ]; then
     wget "https://github.com/adde88/besside-ng_pineapple/raw/master/besside-ng" -O /usr/sbin/besside-ng
-	  chmod +x /usr/sbin/besside-ng
+    chmod +x /usr/sbin/besside-ng
   elif [ "$2" = "sd" ]; then
     mkdir -p /sd/usr/sbin/
-	  wget "https://github.com/adde88/besside-ng_pineapple/raw/master/besside-ng" -O /sd/usr/sbin/besside-ng
-	  chmod +x /sd/usr/sbin/besside-ng
+    wget "https://github.com/adde88/besside-ng_pineapple/raw/master/besside-ng" -O /sd/usr/sbin/besside-ng
+    chmod +x /sd/usr/sbin/besside-ng
   fi
 
   touch /etc/config/BessideNG
@@ -34,4 +34,4 @@ elif [ "$1" = "remove" ]; then
   rm -rf /etc/config/BessideNG
 fi
 
-rm /tmp/BessideNG.progress
+rm -rf /tmp/BessideNG.progress

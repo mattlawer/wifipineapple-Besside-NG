@@ -70,7 +70,7 @@ class BessideNG extends Module
     
     private function refreshStatus() {
         if (!file_exists('/tmp/BessideNG.progress')) {
-            if (!$this->checkDependency("besside-ng")) {
+            if (!$this->checkDeps("besside-ng")) {
                 $installed = false;
                 $install = "Not installed";
                 $installLabel = "danger";
@@ -143,7 +143,7 @@ class BessideNG extends Module
     }
     
     private function handleDependencies() {
-        if (!$this->checkDependency("besside-ng")) {
+        if (!$this->checkDeps("besside-ng")) {
             $this->execBackground("/pineapple/modules/BessideNG/scripts/dependencies.sh install ".$this->request->destination);
             $this->response = array('success' => true);
         } else {
@@ -153,14 +153,14 @@ class BessideNG extends Module
     }
     
     private function getInterfaces() {
-        exec("iwconfig 2> /dev/null | grep \"wlan*\" | grep -v \"mon\" | awk '{print $1}'", $interfaceArray);
+        exec("cat /proc/net/dev | tail -n +3 | cut -f1 -d: | sed 's/ //g' | grep -v \"mon\" | grep \"wlan\"", $interfaceArray);
         $this->response = array("interfaces" => $interfaceArray);
     }
 
     private function getMonitors() {
-        exec("iwconfig 2> /dev/null | grep \"mon\" | awk '{print $1}'", $interfaceArray);
+        exec("cat /proc/net/dev | tail -n +3 | cut -f1 -d: | sed 's/ //g' | grep \"mon\"", $interfaceArray);
         $this->response = array(
-        	"monitors" => $interfaceArray,
+            "monitors" => $interfaceArray,
         	"selected" => reset(preg_grep('/^'.$this->uciGet("BessideNG.run.interface").'/', $interfaceArray))
         );
     }
@@ -293,8 +293,8 @@ class BessideNG extends Module
 
 	/* Protected */
     
-    protected function checkDependency($dependencyName) {
-        return ((exec("which {$dependencyName}") == '' ? false : true) && ($this->uciGet("BessideNG.module.installed")));
+    protected function checkDeps($dependencyName) {
+        return ($this->checkDependency($dependencyName) && $this->uciGet("BessideNG.module.installed"));
     }
 
     protected function getDevice() {

@@ -4,6 +4,8 @@
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/sd/lib:/sd/usr/lib
 export PATH=$PATH:/sd/usr/bin:/sd/usr/sbin
 
+WRAPPER="/pineapple/modules/BessideNG/scripts/wrapper.sh"
+
 MYTIME=`date +%s`
 MYINTERFACE=`uci get BessideNG.autostart.interface`
 RUNFOLDER=/pineapple/modules/BessideNG/log/${MYTIME}
@@ -34,6 +36,6 @@ echo -e "$(date +'%d/%m/%y %H:%M:%S') starting on boot" >> ${LOG}
 echo -e "Interface : ${MYINTERFACE}" >> ${LOG}
 
 cd ${RUNFOLDER} 
-besside-ng ${MYINTERFACE} &> /dev/null &
+$WRAPPER besside-ng ${MYINTERFACE} &> /dev/null &
 cd -
 echo -e "running from ${RUNFOLDER}" >> ${LOG}

@@ -4,11 +4,13 @@
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/sd/lib:/sd/usr/lib
 export PATH=$PATH:/sd/usr/bin:/sd/usr/sbin
 
+WRAPPER="/pineapple/modules/BessideNG/scripts/wrapper.sh"
+
 if [ "$1" = "start" ]; then
   MYTIME=`date +%s`
   MYINTERFACE=`uci get BessideNG.run.interface`
   RUNFOLDER=/pineapple/modules/BessideNG/log/${MYTIME}
-	mkdir -p ${RUNFOLDER}
+  mkdir -p ${RUNFOLDER}
   LOG=${RUNFOLDER}/infos.log
 
   if [ -z "$MYINTERFACE" ]; then
@@ -37,7 +39,7 @@ if [ "$1" = "start" ]; then
   echo -e "interface : ${MYINTERFACE}" >> ${LOG}
   
   cd ${RUNFOLDER}
-  besside-ng ${MYINTERFACE} &> /dev/null &
+  $WRAPPER  besside-ng ${MYINTERFACE} &> /dev/null &
   cd -
   echo -e "running from ${RUNFOLDER}" >> ${LOG}
 elif [ "$1" = "stop" ]; then

@@ -1,8 +1,5 @@
 <?php namespace pineapple;
 
-putenv('LD_LIBRARY_PATH='.getenv('LD_LIBRARY_PATH').':/sd/lib:/sd/usr/lib');
-putenv('PATH='.getenv('PATH').':/sd/usr/bin:/sd/usr/sbin');
-
 class BessideNG extends Module
 {
     public function route()
@@ -153,15 +150,15 @@ class BessideNG extends Module
     }
     
     private function getInterfaces() {
-        exec("cat /proc/net/dev | tail -n +3 | cut -f1 -d: | sed 's/ //g' | grep -v \"mon\" | grep \"wlan\"", $interfaceArray);
+        exec("iwconfig 2> /dev/null | grep \"wlan*\" | grep -v \"mon*\" | awk '{print $1}'", $interfaceArray);
         $this->response = array("interfaces" => $interfaceArray);
     }
 
     private function getMonitors() {
-        exec("cat /proc/net/dev | tail -n +3 | cut -f1 -d: | sed 's/ //g' | grep \"mon\"", $interfaceArray);
+        exec("iwconfig 2> /dev/null | grep \"mon*\" | awk '{print $1}'", $monitorArray);
         $this->response = array(
-            "monitors" => $interfaceArray,
-        	"selected" => reset(preg_grep('/^'.$this->uciGet("BessideNG.run.interface").'/', $interfaceArray))
+            "monitors" => $monitorArray,
+        	"selected" => reset(preg_grep('/^'.$this->uciGet("BessideNG.run.interface").'/', $monitorArray))
         );
     }
 
@@ -294,7 +291,12 @@ class BessideNG extends Module
 	/* Protected */
     
     protected function checkDeps($dependencyName) {
-        return ($this->checkDependency($dependencyName) && $this->uciGet("BessideNG.module.installed"));
+        return ($this->checkDependency($dependencyName) && ($this->uciGet("BessideNG.module.installed")));
+    }
+
+    protected function checkRunning($processName)
+    {
+        return exec("ps x | grep {$processName} | grep -v grep") !== '' ? 1 : 0;
     }
 
     protected function getDevice() {

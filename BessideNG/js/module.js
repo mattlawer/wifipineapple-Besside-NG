@@ -299,7 +299,7 @@ registerController('BessideNG_OwnedController', ['$api', '$scope', '$rootScope',
 	});
 
 	$scope.refreshOutput();
-	$scope.toggleAutoRefresh();
+	//$scope.toggleAutoRefresh();
 
 	$rootScope.$watch('status.refreshOutput', function (param) {
 		if (param) {

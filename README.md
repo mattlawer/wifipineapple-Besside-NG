@@ -16,7 +16,7 @@ besside-ng module for the WiFi Pineapple using besside-ng binaries from [github.
 ![SSH](https://raw.githubusercontent.com/mattlawer/wifipineapple-Besside-NG/master/screenshots/ssh.png)
 
         # Change owner of the module
-        chown -R 100:118 /pineapple/modules/BessideNG/
+        chown -R root:root /pineapple/modules/BessideNG/
 
         # Add execute permission to the scripts
         chmod +x /pineapple/modules/BessideNG/scripts/*

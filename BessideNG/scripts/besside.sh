@@ -50,5 +50,5 @@ elif [ "$1" = "stop" ]; then
 	if [ -f ${LOG} ]; then
 		echo -e " - stopping -" >> ${LOG}
 	fi
-  killall -9 besside-ng
+  killall -9 besside-ng sh
 fi

@@ -12,10 +12,14 @@ touch /tmp/BessideNG.progress
 
 if [ "$1" = "install" ]; then
   if [ "$2" = "internal" ]; then
-    opkg remove aircrack-ng-hak5
+    #opkg remove aircrack-ng-hak5
+    opkg install pciutils
+    opkg install airmon-ng
     opkg install aircrack-ng
   elif [ "$2" = "sd" ]; then
-    opkg remove aircrack-ng-hak5
+    #opkg remove aircrack-ng-hak5
+    opkg --dest sd install pciutils
+    opkg --dest sd install airmon-ng
     opkg --dest sd install aircrack-ng
   fi
 
@@ -28,7 +32,9 @@ if [ "$1" = "install" ]; then
   uci commit BessideNG.module.installed
 
 elif [ "$1" = "remove" ]; then
-  opkg remove aircrack-ng
+  # Would probably break other packages
+  #opkg remove airmon-ng
+  #opkg remove aircrack-ng
   rm -rf /etc/config/BessideNG
 fi
 
